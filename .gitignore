@@ -1,0 +1,42 @@
+# ================== Dependencies ==================
+node_modules/
+
+# ================== Build output ==================
+dist/
+dist-ssr/
+build/
+
+# ================== Environment ==================
+.env
+.env.*
+!.env.example
+
+# ================== Logs ==================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ================== OS junk ==================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ================== Editor ==================
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# NOTE:
+# .gitignore only supports name/pattern rules — Git has NO size-based
+# ignore option. Files >= 99 MB are blocked from commits and pushes by
+# the repository hooks in .githooks/ (scripts/check-large-files.js).
+# Enable them on a fresh clone with:  git config core.hooksPath .githooks

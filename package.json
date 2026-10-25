@@ -1,0 +1,12 @@
+{
+  "name": "club-gallery-images",
+  "private": true,
+  "description": "Convenience wrapper: run the Vite app (in club-photo-gallery/) from the repo root.",
+  "scripts": {
+    "dev": "npm run dev --prefix club-photo-gallery",
+    "build": "npm run build --prefix club-photo-gallery",
+    "lint": "npm run lint --prefix club-photo-gallery",
+    "preview": "npm run preview --prefix club-photo-gallery",
+    "install:app": "npm install --prefix club-photo-gallery"
+  }
+}

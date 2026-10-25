@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const GITHUB_USERNAME = 'ImTanjim';
-const REPO_NAME = 'Tour_Images';
+const REPO_NAME = 'ImTanjim-Tour_Images';
 const BASE_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/photos`;
 
 export const fetchPhotos = async (folder = '') => {

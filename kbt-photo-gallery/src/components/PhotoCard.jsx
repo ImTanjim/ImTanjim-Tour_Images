@@ -8,7 +8,7 @@ const PhotoCard = ({ photo, onClick }) => {
 
   const getImgUrl = () => {
     const filePath = photo.path;
-    return `https://cdn.jsdelivr.net/gh/ImTanjim/Tour_Images@main/${filePath}`;
+    return `https://cdn.jsdelivr.net/gh/ImTanjim/ImTanjim-Tour_Images@main/${filePath}`;
   };
 
   const displayName = photo.name || 'Image';

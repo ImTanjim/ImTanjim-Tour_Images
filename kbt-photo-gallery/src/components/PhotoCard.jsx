@@ -1,71 +1,35 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Image, Maximize } from 'lucide-react';
 
 const PhotoCard = ({ photo, onClick }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false); 
 
+  // JsDeliver URL 
   const getImgUrl = () => {
     const filePath = photo.path;
+
     return `https://cdn.jsdelivr.net/gh/ImTanjim/ImTanjim-Tour_Images@main/${filePath}`;
   };
 
-  const displayName = photo.name || 'Image';
-
   return (
     <motion.div
-      whileHover={{ y: -6 }}
-      whileTap={{ scale: 0.97 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+      whileHover={{ scale: 1.03 }}
+      transition={{ duration: 0.3 }}
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="glass-panel"
       style={{
-        position: 'relative',
         borderRadius: 18,
         overflow: 'hidden',
+        position: 'relative',
         cursor: 'pointer',
-        minHeight: 320,
-        border: '1px solid rgba(148, 163, 184, 0.10)',
-        boxShadow: '0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03)',
-        transition: 'box-shadow 0.35s ease, border-color 0.35s ease',
+        background: 'rgba(255,255,255,0.05)',
+        height: 300,
       }}
     >
+      {/* ================== LOADER ================== */}
       {!isLoaded && (
-        <div className="skeleton" style={{ position: 'absolute', inset: 0 }} />
-      )}
-
-      <img
-        src={getImgUrl()}
-        alt={displayName}
-        onLoad={() => setIsLoaded(true)}
-        onError={() => setIsLoaded(true)}
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          opacity: isLoaded ? 1 : 0,
-          transition: 'opacity 0.45s ease, transform 0.5s ease',
-          transform: isHovered ? 'scale(1.06)' : 'scale(1)',
-          filter: 'contrast(1.04) saturate(0.94)',
-        }}
-      />
-
-      {/* Hover overlay with view/zoom hint */}
-      {isHovered && (
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(180deg, rgba(15,23,42,0), rgba(15,23,42,0.55))',
-            pointerEvents: 'none',
-            transition: 'background 0.3s ease',
-          }}
-        />
-      )}
-      {isHovered && (
         <div
           style={{
             position: 'absolute',
@@ -73,80 +37,56 @@ const PhotoCard = ({ photo, onClick }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            pointerEvents: 'none',
+            background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
+            color: 'rgba(255,255,255,0.4)',
+            fontSize: 13,
           }}
         >
-          <motion.div
-            whileHover={{ scale: 1.08 }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 46,
-              height: 46,
-              borderRadius: 12,
-              background: 'rgba(15, 23, 42, 0.75)',
-              border: '1px solid rgba(255,255,255,0.25)',
-              color: '#fff',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
-            }}
-          >
-            <Maximize size={17} strokeWidth={2} />
-          </motion.div>
+          Loading...
         </div>
       )}
 
-      <div
+      {/* ================== IMAGE ================== */}
+      <img
+        src={getImgUrl()}
+        alt={photo.name}
+        onLoad={() => setIsLoaded(true)}
+        onError={() => setIsLoaded(true)}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          opacity: isLoaded ? 1 : 0,
+          transition: 'opacity 0.4s ease, transform 0.4s ease',
+          transform: isHovered ? 'scale(1.08)' : 'scale(1)',
+        }}
+      />
+
+      {/* ================== HOVER OVERLAY ================== */}
+      <motion.div
+        animate={{ opacity: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
         style={{
           position: 'absolute',
-          left: 16,
-          right: 16,
-          bottom: 16,
+          inset: 0,
+          background:
+            'linear-gradient(to top, rgba(0,0,0,0.8), transparent)',
           display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          color: '#e2e8f0',
-          fontFamily:
-            'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-          fontSize: 14,
-          fontWeight: 600,
-          letterSpacing: '-0.02em',
-          textShadow: '0 2px 10px rgba(15,23,42,0.8)',
-          backdropFilter: 'blur(6px)',
-          padding: '0 8px',
-          borderRadius: 10,
-          background: 'rgba(15, 23, 42, 0.4)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          flexDirection: 'column',
+          justifyContent: 'flex-end',
+          padding: 20,
+          pointerEvents: 'none',
         }}
       >
-        <span
-          style={{
-            width: 16,
-            height: 16,
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 5,
-            background: 'rgba(148, 163, 184, 0.18)',
-            border: '1px solid rgba(148, 163, 184, 0.25)',
-            fontSize: 9,
-            color: '#dbeafe',
-            flexShrink: 0,
-          }}
-        >
-          •
+        <span style={{ color: '#a5b4fc', fontSize: 12 }}>
+          {photo.category}
         </span>
-        <span
-          style={{
-            whiteSpace: 'pre-line',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
+        <h3
+          style={{ color: '#fff', margin: '5px 0 0', fontSize: 15 }}
         >
-          {displayName}
-        </span>
-      </div>
+          {photo.name}
+        </h3>
+      </motion.div>
     </motion.div>
   );
 };

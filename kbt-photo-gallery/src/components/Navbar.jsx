@@ -1,17 +1,16 @@
-import { Image, Sparkles } from 'lucide-react';
-
 const Navbar = () => {
   return (
     <nav
-      className="glass-panel"
       style={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         zIndex: 100,
+        backdropFilter: 'blur(12px)',
+        backgroundColor: 'rgba(15, 15, 25, 0.75)',
         borderBottom: '1px solid rgba(255,255,255,0.08)',
-        padding: '14px 0',
+        padding: '16px 0',
       }}
     >
       <div
@@ -24,21 +23,23 @@ const Navbar = () => {
           alignItems: 'center',
         }}
       >
-        {/* Brand: Logo + Title */}
+        {/* বাম পাশের অংশ: Logo + Title */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div
             style={{
-              width: 46,
-              height: 46,
+              width: 50,
+              height: 50,
               borderRadius: 12,
               background: 'linear-gradient(135deg, #6366f1, #a855f7)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 8px 20px rgba(168, 85, 247, 0.35)',
+              fontSize: 20,
+              fontWeight: 800,
+              color: '#fff',
             }}
           >
-            <Image size={20} strokeWidth={2} stroke="currentColor" />
+            JOY
           </div>
           <span
             style={{
@@ -46,44 +47,32 @@ const Navbar = () => {
               fontWeight: 700,
               color: '#fff',
               letterSpacing: '-0.02em',
-              background: 'linear-gradient(to right, #fff, #cbd5e1)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
             }}
           >
-            KBT Photo Gallery
+            Club Photo Gallery
           </span>
         </div>
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 16,
+          gap: 20,
         }}>
           <div style={{
-            height: 28,
+            height: 30,
             width: 1,
-            background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.18), transparent)',
+            background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.3), transparent)',
           }} />
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-end',
-            gap: 2,
+          <h2 style={{
+            fontSize: "clamp(1rem, 2.5vw, 1.5rem)",
+            fontWeight: 400,
+            color: "#a855f7",
+            textAlign: "right",
+            letterSpacing: "-0.02em",
+            fontStyle: "italic",
+            margin: 0,
           }}>
-            <Sparkles size={14} strokeWidth={2} color="#a855f7" style={{ marginBottom: 2 }} />
-            <h2 style={{
-              fontSize: "clamp(0.95rem, 2.5vw, 1.25rem)",
-              fontWeight: 600,
-              color: "#a855f7",
-              textAlign: "right",
-              letterSpacing: "-0.02em",
-              fontStyle: "italic",
-              margin: 0,
-              lineHeight: 1.2,
-            }}>
             ✨ প্রতিটি মুহূর্ত বিশেষ
-            </h2>
-          </div>
+          </h2>
         </div>
       </div>
     </nav>

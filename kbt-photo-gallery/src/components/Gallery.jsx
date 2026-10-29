@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Image } from 'lucide-react';
 import { fetchPhotos, fetchFolders } from '../utils/githubApi';
 import PhotoCard from './PhotoCard';
 import Lightbox from './Lightbox';
@@ -10,7 +9,6 @@ const Gallery = () => {
   const [categories, setCategories] = useState(['All']);
   const [activeCategory, setActiveCategory] = useState('All');
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   /* ================== LOAD FOLDERS + PHOTOS (single fetch pass) ================== */
   useEffect(() => {
@@ -18,7 +16,6 @@ const Gallery = () => {
 
     const loadAll = async () => {
       try {
-        setIsLoading(true);
         const folderData = await fetchFolders();
 
         // Root + every folder fetched in parallel (instead of one-by-one)
@@ -46,8 +43,6 @@ const Gallery = () => {
         setPhotos([...rootWithCategory, ...folderPhotoLists.flat()]);
       } catch (error) {
         console.error('Photo load failed:', error);
-      } finally {
-        if (!cancelled) setIsLoading(false);
       }
     };
 
@@ -70,10 +65,6 @@ const Gallery = () => {
     [photos, activeCategory],
   );
 
-  /* ================== SKELETONS ================== */
-  const skeletonCount = 8;
-  const skeletons = Array.from({ length: skeletonCount }, (_, i) => i);
-
   /* ================== LIGHTBOX NAVIGATION ================== */
   const handlePrev = () =>
     setSelectedIndex((i) =>
@@ -92,81 +83,92 @@ const Gallery = () => {
   return (
     <section
       id="gallery"
-      className="fade-in-up"
       style={{
-        padding: '48px 20px 70px',
+        padding: '100px 2px',
         background:
-          'linear-gradient(180deg, #0e1626 0%, #090d17 100%)',
+          'linear-gradient(180deg, #16213e 0%, #0f0f1a 100%)',
         minHeight: '100vh',
-        borderTop: '1px solid rgba(148, 163, 184, 0.12)',
       }}
     >
-      <div style={{ maxWidth: 1400, margin: '0 auto' }}>
-        {/* ================== HEADER TITLE ================== */}
-        <div style={{ marginBottom: 8 }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            color: 'rgba(255,255,255,0.85)',
-          }}>
-            <span style={{
-              fontSize: 20,
-              fontWeight: 800,
-              letterSpacing: '-0.02em',
-              background: 'linear-gradient(to right, #fff, #cbd5e1)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}>
-              Gallery
-            </span>
-            <span style={{
-              fontSize: 13,
-              color: 'rgba(255,255,255,0.5)',
-              fontWeight: 600,
-            }}>
-              {filteredPhotos.length} photo{filteredPhotos.length !== 1 ? 's' : ''}
-            </span>
-          </div>
-        </div>
+      <div style={{ maxWidth: 1600, margin: '0 auto' }}>
+        {/* ================== HEADER ================== */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          style={{ textAlign: 'center', marginBottom: 40 }}
+        >
+          <p
+            style={{
+              color: 'rgba(255,255,255,0.6)',
+              fontSize: 14,
+              maxWidth: 500,
+              margin: '0 auto',
+            }}
+          >
+            আমাদের সব মজার মুহূর্ত এক জায়গায়। ক্যাটাগরি
+            সিলেক্ট করে দেখুন!
+          </p>
+        </motion.div>
 
-        {/* ================== CATEGORY PILLS ================== */}
-        <div
+        {/* ================== CATEGORY BUTTONS ================== */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
           style={{
             display: 'flex',
-            gap: 10,
+            gap: 12,
             justifyContent: 'center',
+            marginBottom: 40,
             flexWrap: 'wrap',
-            marginBottom: 30,
           }}
         >
           {categories.map((cat) => (
             <button
               key={cat}
-              className={`pill ${activeCategory === cat ? 'pill--active' : ''}`}
               onClick={() => {
                 setActiveCategory(cat);
-                setSelectedIndex(null);
+                setSelectedIndex(null); // close/reset the lightbox on category switch
+              }}
+              style={{
+                padding: '10px 22px',
+                borderRadius: 12,
+                border:
+                  activeCategory === cat
+                    ? '1px solid rgba(99,102,241,0.5)'
+                    : '1px solid rgba(255,255,255,0.1)',
+                background:
+                  activeCategory === cat
+                    ? 'linear-gradient(135deg, rgba(99,102,241,0.35), rgba(168,85,247,0.35))'
+                    : 'rgba(255,255,255,0.05)',
+                color:
+                  activeCategory === cat
+                    ? '#fff'
+                    : 'rgba(255,255,255,0.6)',
+                fontSize: 14,
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
               }}
             >
               {cat}
             </button>
           ))}
-        </div>
+        </motion.div>
 
         {/* ================== PHOTO GRID ================== */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-            gap: 22,
+            gridTemplateColumns:
+              'repeat(auto-fill, minmax(260px, 1fr))',
+            gap: 24,
           }}
         >
-          {isLoading ? (
-            skeletons.map((i) => (
-              <div key={i} className="skeleton" style={{ height: 320 }} />
-            ))
-          ) : filteredPhotos.length > 0 ? (
+          {filteredPhotos.length > 0 ? (
             filteredPhotos.map((photo, index) => (
               <PhotoCard
                 key={photo.path || photo.download_url}
@@ -175,43 +177,15 @@ const Gallery = () => {
               />
             ))
           ) : (
-            <div
+            <p
               style={{
+                color: '#fff',
+                textAlign: 'center',
                 gridColumn: '1/-1',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '60px 20px',
-                color: 'rgba(255,255,255,0.55)',
               }}
             >
-              <div style={{
-                width: 48,
-                height: 48,
-                borderRadius: 14,
-                background: 'rgba(255,255,255,0.06)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 12,
-              }}>
-                <Image size={22} strokeWidth={2} color="rgba(255,255,255,0.45)" />
-              </div>
-              <p className="empty-msg" style={{ marginBottom: 6 }}>
-                কোনো ছবি পাওয়া যায়নি
-              </p>
-              <p style={{
-                fontSize: 13,
-                color: 'rgba(255,255,255,0.4)',
-                maxWidth: 300,
-                textAlign: 'center',
-                lineHeight: 1.5,
-              }}>
-                Try selecting another category or check back soon.
-              </p>
-            </div>
+              কোনো ছবি পাওয়া যায়নি
+            </p>
           )}
         </div>
       </div>

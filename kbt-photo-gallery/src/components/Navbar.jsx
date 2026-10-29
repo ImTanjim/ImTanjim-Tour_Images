@@ -49,7 +49,7 @@ const Navbar = () => {
               letterSpacing: '-0.02em',
             }}
           >
-            Club Photo Gallery
+            KBT Gallery
           </span>
         </div>
         <div style={{
